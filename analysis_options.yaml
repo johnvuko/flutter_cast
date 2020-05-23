@@ -1,0 +1,32 @@
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - lib/cast_channel/*
+
+# https://dart-lang.github.io/linter/lints/
+linter:
+  rules:
+    # Error Rules
+    avoid_empty_else: true
+    avoid_relative_lib_imports: true
+    avoid_returning_null_for_future: true
+    avoid_slow_async_io: true
+    avoid_types_as_parameter_names: true
+    control_flow_in_finally: true
+    empty_statements: true
+    no_adjacent_strings_in_list: true
+    no_duplicate_case_values: true
+    prefer_void_to_null: true
+    unnecessary_statements: true
+    unrelated_type_equality_checks: true
+    # Style Rules
+    always_declare_return_types: true
+    annotate_overrides: true
+    avoid_field_initializers_in_const_classes: true
+    avoid_renaming_method_parameters: true
+    avoid_void_async: true
+    directives_ordering: true
+    unnecessary_await_in_return: true
+    sort_pub_dependencies: true
+    omit_local_variable_types: false

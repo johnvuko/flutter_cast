@@ -1,0 +1,18 @@
+name: cast
+description: Dart package to discover and connect with Chromecast devices
+version: 0.1.0
+author: Jonathan VUKOVICH-TRIBOUHARET
+homepage: https://github.com/jonathantribouharet/flutter_cast
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  mdns_plugin: ^1.1.4
+  protobuf: ^1.0.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  pedantic: ^1.8.0
+  protoc_plugin: ^19.0.1
