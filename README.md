@@ -54,6 +54,10 @@ Future<void> _connect(BuildContext context, CastDevice object) async {
     }
   });
 
+  session.messageStream.listen((message) {
+    print('receive message: $message');
+  });
+
   session.sendMessage(CastSession.kNamespaceReceiver, {
     'type': 'LAUNCH',
     'appId': 'YouTube', // set the appId of your app here

@@ -4,13 +4,13 @@ class CastDevice {
 
   /// friendly name
   final String name;
-  final String ip;
+  final String host;
   final int port;
 
   const CastDevice({
     this.serviceName,
     this.name,
-    this.ip,
+    this.host,
     this.port,
   });
 }

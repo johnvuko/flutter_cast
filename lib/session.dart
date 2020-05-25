@@ -34,7 +34,7 @@ class CastSession {
 
   static Future<CastSession> connect(String sessionId, CastDevice device, [Duration timeout]) async {
     final _socket = await CastSocket.connect(
-      device.ip,
+      device.host,
       device.port,
       timeout,
     );

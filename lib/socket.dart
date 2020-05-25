@@ -21,11 +21,11 @@ class CastSocket {
 
   CastSocket._(this._socket);
 
-  static Future<CastSocket> connect(String ip, int port, [Duration timeout]) async {
+  static Future<CastSocket> connect(String host, int port, [Duration timeout]) async {
     timeout ??= Duration(seconds: 10);
 
     final _socket = await SecureSocket.connect(
-      ip,
+      host,
       port,
       onBadCertificate: (X509Certificate certificate) => true, // chromecast use self-signed certificate
       timeout: timeout,

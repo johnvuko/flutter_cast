@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }).toList(),
         );
       },
-    ); // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 
   Future<void> _connect(BuildContext context, CastDevice object) async {
@@ -59,8 +59,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     session.stateStream.listen((state) {
       if (state == CastSessionState.connected) {
+        final snackBar = SnackBar(content: Text('Connected'));
+        Scaffold.of(context).showSnackBar(snackBar);
+
         _sendMessage(session);
       }
+    });
+
+    session.messageStream.listen((message) {
+      print('receive message: $message');
     });
 
     session.sendMessage(CastSession.kNamespaceReceiver, {

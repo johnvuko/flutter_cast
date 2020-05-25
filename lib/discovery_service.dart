@@ -53,7 +53,7 @@ class _Delegate implements MDNSPluginDelegate {
   void onServiceResolved(MDNSService service) {
     devices.removeWhere((x) => x.serviceName == service.name);
 
-    final device = _transformServiceinDevice(service);
+    final device = _transformServiceInDevice(service);
     if (device != null) {
       devices.add(device);
     } else {
@@ -78,14 +78,11 @@ class _Delegate implements MDNSPluginDelegate {
   @override
   void onDiscoveryStopped() {}
 
-  static CastDevice _transformServiceinDevice(MDNSService service) {
-    if (service.addresses.isEmpty) {
-      return null;
-    }
+  static CastDevice _transformServiceInDevice(MDNSService service) {
+    String host = service.map['hostName'] ?? service.addresses.first;
 
     String name;
-
-    if (service.txt['fn'] != null) {
+    if (service.txt != null && service.txt['fn'] != null) {
       name = MDNSService.toUTF8String(service.txt['fn']);
     }
     name ??= service.name;
@@ -93,7 +90,7 @@ class _Delegate implements MDNSPluginDelegate {
     return CastDevice(
       serviceName: service.name,
       name: name,
-      ip: service.addresses.first,
+      host: host,
       port: service.port,
     );
   }
