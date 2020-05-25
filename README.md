@@ -2,11 +2,26 @@
 
 Dart package to discover and connect with Chromecast devices
 
+## Installation
+
+Add this to your package's pubspec.yaml file:
+
+```
+dependencies:
+  cast: ^0.1.1
+```
+
 ## Usage
+
+Start discovery service:
 
 ```
 CastDiscoveryService().start();
+```
 
+List devices:
+
+```
 Widget build(BuildContext context) {
   StreamBuilder<List<CastDevice>>(
     stream: CastDiscoveryService().stream,
@@ -25,30 +40,49 @@ Widget build(BuildContext context) {
     },
   );
 }
+```
 
+Connect to device:
+
+```
 Future<void> _connect(BuildContext context, CastDevice object) async {
   final session = await CastSessionManager().startSession(object);
 
   session.stateStream.listen((state) {
     if (state == CastSessionState.connected) {
-      session.sendMessage('urn:x-cast:namespace-of-the-app', {
-        'type': 'sample',
-      });
+      _sendMessage(session);
     }
   });
 
   session.sendMessage(CastSession.kNamespaceReceiver, {
     'type': 'LAUNCH',
-    'appId': 'YouTube',
+    'appId': 'YouTube', // set the appId of your app here
   });
 }
-
 ```
 
-## Build
+`CastSessionManager` is used to keep track of all sessions.
 
-// https://docs.rs/crate/gcast/0.1.5/source/PROTOCOL.md
+Send message:
+
+```
+void _sendMessage(CastSession session) {
+  session.sendMessage('urn:x-cast:namespace-of-the-app', {
+    'type': 'sample',
+  });
+});
+```
+
+Except for the launch message, you should wait until the session have a connected state before sending message.
+
+## Note
+
+Some informations about the protocol used https://docs.rs/crate/gcast/0.1.5/source/PROTOCOL.md
 
     $ pub global activate protoc_plugin
     $ export PATH="$PATH":"$HOME/.pub-cache/bin"
     $ protoc -I=./lib/cast_channel --dart_out=./lib/cast_channel ./lib/cast_channel/cast_channel.proto --plugin "pub run protoc_plugin"
+
+## Author
+
+- [Jonathan VUKOVICH-TRIBOUHARET](https://github.com/jonathantribouharet) 
