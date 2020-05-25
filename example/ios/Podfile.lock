@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - mdns_plugin (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - mdns_plugin (from `.symlinks/plugins/mdns_plugin/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  mdns_plugin:
+    :path: ".symlinks/plugins/mdns_plugin/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  mdns_plugin: f678ac538ece5a95490ede585dfa6b46aaaac977
+
+PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+
+COCOAPODS: 1.9.1

@@ -70,7 +70,7 @@ void _sendMessage(CastSession session) {
   session.sendMessage('urn:x-cast:namespace-of-the-app', {
     'type': 'sample',
   });
-});
+}
 ```
 
 Except for the launch message, you should wait until the session have a connected state before sending message.
