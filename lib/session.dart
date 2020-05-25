@@ -14,6 +14,7 @@ class CastSession {
   static const kNamespaceHeartbeat = 'urn:x-cast:com.google.cast.tp.heartbeat';
   static const kNamespaceReceiver = 'urn:x-cast:com.google.cast.receiver';
   static const kNamespaceDeviceauth = 'urn:x-cast:com.google.cast.tp.deviceauth';
+  static const kNamespaceMedia = 'urn:x-cast:com.google.cast.media';
 
   final String sessionId;
   CastSocket get socket => _socket;
