@@ -8,7 +8,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  cast: ^0.1.1
+  cast: any
 ```
 
 ## Usage
