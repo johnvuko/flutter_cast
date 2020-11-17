@@ -11,6 +11,10 @@ dependencies:
   cast: any
 ```
 
+### iOS
+
+Since iOS 14 a few more steps are required https://developers.google.com/cast/docs/ios_sender/ios_permissions_changes
+
 ## Usage
 
 Start discovery service:
