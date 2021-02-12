@@ -63,8 +63,10 @@ class CastSocket {
   }
 
   void sendMessage(String namespace, String sourceId, String destinationId, Map<String, dynamic> payload) {
-    payload['requestId'] = _requestId;
-    _requestId += 1;
+    if (payload['requestId'] == null) {
+      payload['requestId'] = _requestId;
+      _requestId += 1;
+    }
 
     CastMessage castMessage = CastMessage();
     castMessage.protocolVersion = CastMessage_ProtocolVersion.CASTV2_1_0;
