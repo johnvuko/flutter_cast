@@ -1,3 +1,7 @@
+## [0.3.0]
+
+* Add the possibility to use your own requestId
+
 ## [0.2.0]
 
 * Improve service discovery #1
