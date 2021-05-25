@@ -21,7 +21,7 @@ class CastSocket {
 
   CastSocket._(this._socket);
 
-  static Future<CastSocket> connect(String host, int port, [Duration timeout]) async {
+  static Future<CastSocket> connect(String host, int port, [Duration? timeout]) async {
     timeout ??= Duration(seconds: 10);
 
     final _socket = await SecureSocket.connect(
@@ -47,10 +47,8 @@ class CastSocket {
       List<int> slice = event.getRange(4, event.length).toList();
       CastMessage message = CastMessage.fromBuffer(slice);
 
-      if (message != null && message.payloadUtf8 != null) {
-        Map<String, dynamic> payload = jsonDecode(message.payloadUtf8);
-        _controller.add(CastSocketMessage(message.namespace, payload));
-      }
+      Map<String, dynamic> payload = jsonDecode(message.payloadUtf8);
+      _controller.add(CastSocketMessage(message.namespace, payload));
     }, onError: (error) {
       _controller.addError(error);
     }, onDone: () {
@@ -77,7 +75,7 @@ class CastSocket {
     castMessage.payloadUtf8 = jsonEncode(payload);
 
     Uint8List bytes = castMessage.writeToBuffer();
-    Uint32List headers = Uint32List.fromList(_writeUInt32BE(List<int>(4), bytes.lengthInBytes));
+    Uint32List headers = Uint32List.fromList(_writeUInt32BE(List<int>.filled(4, 0), bytes.lengthInBytes));
     Uint32List data = Uint32List.fromList(headers.toList()..addAll(bytes.toList()));
 
     _socket.add(data);

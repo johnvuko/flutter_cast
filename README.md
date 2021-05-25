@@ -17,12 +17,6 @@ Since iOS 14 a few more steps are required https://developers.google.com/cast/do
 
 ## Usage
 
-Start discovery service:
-
-```
-CastDiscoveryService().start();
-```
-
 List devices:
 
 ```

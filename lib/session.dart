@@ -25,14 +25,14 @@ class CastSession {
 
   final CastSocket _socket;
   CastSessionState _state = CastSessionState.connecting;
-  String _transportId;
+  String? _transportId;
 
   final _stateController = StreamController<CastSessionState>.broadcast();
   final _messageController = StreamController<Map<String, dynamic>>.broadcast();
 
   CastSession._(this.sessionId, this._socket);
 
-  static Future<CastSession> connect(String sessionId, CastDevice device, [Duration timeout]) async {
+  static Future<CastSession> connect(String sessionId, CastDevice device, [Duration? timeout]) async {
     final _socket = await CastSocket.connect(
       device.host,
       device.port,

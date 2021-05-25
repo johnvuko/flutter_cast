@@ -13,7 +13,7 @@ class CastSessionManager {
 
   final sessions = <CastSession>[];
 
-  Future<CastSession> startSession(CastDevice device, [Duration timeout]) async {
+  Future<CastSession> startSession(CastDevice device, [Duration? timeout]) async {
     String sessionId = 'client-${Random().nextInt(99999)}';
 
     while (sessions.contains((x) => x.sessionId == sessionId)) {
@@ -28,7 +28,9 @@ class CastSessionManager {
   }
 
   Future<dynamic> endSession(String sessionId) async {
-    final session = sessions.firstWhere((x) => x.sessionId == sessionId, orElse: () => null);
+    // cast required to avoid adding `collection` dependency
+    // https://github.com/dart-lang/sdk/issues/42947
+    final session = sessions.cast<CastSession?>().firstWhere((x) => x?.sessionId == sessionId, orElse: () => null);
     if (session == null) {
       return;
     }

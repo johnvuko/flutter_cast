@@ -1,3 +1,8 @@
+## [1.0.0]
+
+* Migrate to null safety
+* Replace dependency to `mdns_plugin` by `multicast_dns`
+
 ## [0.3.0]
 
 * Add the possibility to use your own requestId
