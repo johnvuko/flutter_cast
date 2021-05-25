@@ -8,7 +8,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  cast: any
+  cast: ^1.0.0
 ```
 
 ### iOS
@@ -21,16 +21,39 @@ List devices:
 
 ```
 Widget build(BuildContext context) {
-  StreamBuilder<List<CastDevice>>(
-    stream: CastDiscoveryService().stream,
-    initialData: CastDiscoveryService().devices,
+  return FutureBuilder<List<CastDevice>>(
+    future: CastDiscoveryService().search(),
     builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return Center(
+          child: Text(
+            'Error: ${snapshot.error.toString()}',
+          ),
+        );
+      } else if (!snapshot.hasData) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      if (snapshot.data!.isEmpty) {
+        return Column(
+          children: [
+            Center(
+              child: Text(
+                'No Chromecast founded',
+              ),
+            ),
+          ],
+        );
+      }
+
       return Column(
-        children: snapshot.data.map((device) {
+        children: snapshot.data!.map((device) {
           return ListTile(
             title: Text(device.name),
             onTap: () {
-              _connect(context, device);
+              _connectToYourApp(context, device);
             },
           );
         }).toList(),
