@@ -15,6 +15,20 @@ dependencies:
 
 Since iOS 14 a few more steps are required https://developers.google.com/cast/docs/ios_sender/ios_permissions_changes
 
+In `ios/Runner/Info.plist` add:
+
+```xml
+<key>NSBonjourServices</key>
+<array>
+  <string>_googlecast._tcp</string>
+  <string>_YOUR_APP_ID._googlecast._tcp</string>
+</array>
+
+<key>NSLocalNetworkUsageDescription</key>
+<string>${PRODUCT_NAME} uses the local network to discover Cast-enabled devices on your WiFi
+network.</string>
+```
+
 ## Usage
 
 List devices:
