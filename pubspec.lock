@@ -29,6 +29,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.1"
+  bonsoir:
+    dependency: "direct main"
+    description:
+      name: bonsoir
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+1"
+  bonsoir_platform_interface:
+    dependency: transitive
+    description:
+      name: bonsoir_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   characters:
     dependency: transitive
     description:
@@ -118,13 +132,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  multicast_dns:
-    dependency: "direct main"
-    description:
-      name: multicast_dns
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
   node_interop:
     dependency: transitive
     description:
@@ -160,6 +167,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.0"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   protobuf:
     dependency: "direct main"
     description:
@@ -237,3 +251,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.12.0 <3.0.0"
+  flutter: ">=1.12.0"

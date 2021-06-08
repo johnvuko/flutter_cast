@@ -1,7 +1,11 @@
+## [1.1.0]
+
+* Replace dependency `multicast_dns` (not working on iOS) by `bonsoir`
+
 ## [1.0.0]
 
 * Migrate to null safety
-* Replace dependency to `mdns_plugin` by `multicast_dns`
+* Replace dependency `mdns_plugin` (doesn't support null safety) by `multicast_dns`
 
 ## [0.3.0]
 

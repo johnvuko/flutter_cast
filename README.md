@@ -8,7 +8,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  cast: ^1.0.0
+  cast: ^1.1.0
 ```
 
 ### iOS

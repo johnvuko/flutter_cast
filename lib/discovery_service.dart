@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:multicast_dns/multicast_dns.dart';
+import 'package:bonsoir/bonsoir.dart';
 
 import 'device.dart';
 
-const _domain = '_googlecast._tcp.local';
+const _domain = '_googlecast._tcp';
 
 class CastDiscoveryService {
   static final CastDiscoveryService _instance = CastDiscoveryService._();
@@ -16,69 +16,44 @@ class CastDiscoveryService {
 
   Future<List<CastDevice>> search({Duration timeout = const Duration(seconds: 5)}) async {
     final results = <CastDevice>[];
-    final client = MDnsClient();
 
-    await client.start();
+    final discovery = BonsoirDiscovery(type: _domain);
+    await discovery.ready;
+    await discovery.start();
 
-    await for (PtrResourceRecord ptr in client.lookup<PtrResourceRecord>(ResourceRecordQuery.serverPointer(_domain), timeout: timeout)) {
-      if (results.any((x) => x.serviceName == ptr.domainName)) {
-        continue;
-      }
-
-      await for (final srv in client.lookup<SrvResourceRecord>(ResourceRecordQuery.service(ptr.domainName))) {
-        final serviceName = ptr.domainName;
-        final port = srv.port;
-        String host = srv.target; // doesn't seem to work, => resolve IPv4
-        Map<String, String>? extras;
-
-        String? nameFromExtras;
-        final nameFromDomain = ptr.domainName.replaceAll('.$_domain', '').replaceAll(srv.target.replaceAll('.local', '').replaceAll('-', ''), '').replaceAll('-', ' ').trim();
-
-        await for (final ipAddress in client.lookup<IPAddressResourceRecord>(ResourceRecordQuery.addressIPv4(srv.target))) {
-          host = ipAddress.address.address;
+    discovery.eventStream!.listen((event) {
+      if (event.type == BonsoirDiscoveryEventType.DISCOVERY_SERVICE_RESOLVED) {
+        if (event.service == null || event.service?.attributes == null) {
+          return;
         }
 
-        if (host == srv.target) {
-          await for (final ipAddress in client.lookup<IPAddressResourceRecord>(ResourceRecordQuery.addressIPv6(srv.target))) {
-            host = ipAddress.address.address;
-          }
+        final port = event.service!.port;
+        final host = event.service?.toJson()['service.ip'];
+        String name = [event.service?.attributes?['md'], event.service?.attributes?['fn']].whereType<String>().join(' - ');
+        if (name.isEmpty) {
+          name = event.service!.name;
         }
 
-        await for (final text in client.lookup<TxtResourceRecord>(ResourceRecordQuery.text(ptr.domainName))) {
-          extras = text.text.split('\n').fold<Map<String, String>>(<String, String>{}, (Map<String, String> acc, line) {
-            final values = line.split('=');
-
-            if (values.length < 2) {
-              return acc;
-            }
-
-            final key = values.first;
-            final value = values.skip(1).join('');
-
-            acc[key] = value;
-            return acc;
-          });
-
-          if (extras['fn']?.isNotEmpty ?? false) {
-            nameFromExtras = extras['fn']; // Chromecast function (Office, Living room...)
-          } else if (extras['md']?.isNotEmpty ?? false) {
-            nameFromExtras = extras['md']; // Chromecast model (Chromecast Ultra...)
-          }
+        if (host == null) {
+          return;
         }
 
-        final device = CastDevice(
-          serviceName: serviceName,
-          name: nameFromExtras ?? nameFromDomain,
-          host: host,
-          port: port,
-          extras: extras ?? {},
+        results.add(
+          CastDevice(
+            serviceName: event.service!.name,
+            name: name,
+            port: port,
+            host: host,
+            extras: event.service!.attributes ?? {},
+          ),
         );
-
-        results.add(device);
       }
-    }
+    }, onError: (error) {
+      print('[CastDiscoveryService] error ${error.runtimeType} - $error');
+    });
 
-    client.stop();
+    await Future.delayed(timeout);
+    await discovery.stop();
 
     return results.toSet().toList();
   }
