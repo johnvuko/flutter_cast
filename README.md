@@ -11,6 +11,16 @@ dependencies:
   cast: ^1.1.0
 ```
 
+The `bonsoir` dependency currently have a [bug](https://github.com/Skyost/Bonsoir/issues/17), you need to use the git version
+
+```
+dependency_overrides:
+  cast:
+    git:
+      url: git://github.com/Skyost/Bonsoir.git
+      path: bonsoir
+```
+
 ### iOS
 
 Since iOS 14 a few more steps are required https://developers.google.com/cast/docs/ios_sender/ios_permissions_changes
