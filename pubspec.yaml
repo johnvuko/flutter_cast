@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bonsoir: ^1.0.0+1
+  bonsoir: ^1.0.0
   protobuf: ^2.0.0
 
 dev_dependencies:
