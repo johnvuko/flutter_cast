@@ -10,6 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   bonsoir:
+    git:
+      url: git://github.com/Skyost/Bonsoir.git
+      path: bonsoir
   protobuf: ^2.0.0
 
 dev_dependencies:
