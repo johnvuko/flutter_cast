@@ -1,3 +1,7 @@
+## [1.1.1]
+
+* Upgrade dependency `bonsoir`
+
 ## [1.1.0]
 
 * Replace dependency `multicast_dns` (not working on iOS) by `bonsoir`
