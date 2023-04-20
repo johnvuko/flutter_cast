@@ -37,18 +37,34 @@ packages:
     dependency: "direct main"
     description:
       name: bonsoir
-      sha256: "7c7beb1f47729526235b55ea82ceac7f7897eee419c39b28a0780c0d276875fa"
+      sha256: d804e89b71da2c32c48a8c0a0c100e746521869429721ffbd61330ee95933836
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1+2"
+    version: "2.0.0"
+  bonsoir_android:
+    dependency: transitive
+    description:
+      name: bonsoir_android
+      sha256: "2c089240abba5e1f466f2b6e690b6400fbfe9a446c5233cce4b79de279982909"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0+1"
+  bonsoir_darwin:
+    dependency: transitive
+    description:
+      name: bonsoir_darwin
+      sha256: e6dfa3062cb9dc40cb3b640445a9b1c727677c9e27dc54104b2743e58bd5f80c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0+3"
   bonsoir_platform_interface:
     dependency: transitive
     description:
       name: bonsoir_platform_interface
-      sha256: a44705c2899b102231b35e1a417a87799603af24cc14076890532cea66acdbe4
+      sha256: "2f30c5f144309f690f11890e7db52ddc8a4f8a576a1ec9e3761bb430c2b986cd"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.0+1"
   characters:
     dependency: transitive
     description:
@@ -202,10 +218,10 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: c2c49e16d42fd6983eb55e44b7f197fdf16b4da7aab7f8e1d21da307cad3fb02
+      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.4"
   protobuf:
     dependency: "direct main"
     description:
@@ -292,5 +308,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=1.12.0"
+  dart: ">=2.17.0 <3.0.0"
+  flutter: ">=3.0.0"
