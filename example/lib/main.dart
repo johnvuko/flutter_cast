@@ -90,8 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     session.stateStream.listen((state) {
       if (state == CastSessionState.connected) {
-        // final snackBar = SnackBar(content: Text('Connected'));
-        // Scaffold.of(context).showBottomSheet(snackBar.);
+        final snackBar = SnackBar(content: Text('Connected'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
         _sendMessageToYourApp(session);
       }
@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     session.stateStream.listen((state) {
       if (state == CastSessionState.connected) {
         final snackBar = SnackBar(content: Text('Connected'));
-        // Scaffold.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
 
