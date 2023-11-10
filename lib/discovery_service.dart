@@ -14,7 +14,8 @@ class CastDiscoveryService {
     return _instance;
   }
 
-  Future<List<CastDevice>> search({Duration timeout = const Duration(seconds: 5)}) async {
+  Future<List<CastDevice>> search(
+      {Duration timeout = const Duration(seconds: 5)}) async {
     final results = <CastDevice>[];
 
     final discovery = BonsoirDiscovery(type: _domain);
@@ -22,14 +23,17 @@ class CastDiscoveryService {
     await discovery.start();
 
     discovery.eventStream!.listen((event) {
-      if (event.type == BonsoirDiscoveryEventType.DISCOVERY_SERVICE_RESOLVED) {
+      if (event.type == BonsoirDiscoveryEventType.discoveryServiceResolved) {
         if (event.service == null || event.service?.attributes == null) {
           return;
         }
 
         final port = event.service!.port;
         final host = event.service?.toJson()['service.ip'];
-        String name = [event.service?.attributes?['md'], event.service?.attributes?['fn']].whereType<String>().join(' - ');
+        String name = [
+          event.service?.attributes?['md'],
+          event.service?.attributes?['fn']
+        ].whereType<String>().join(' - ');
         if (name.isEmpty) {
           name = event.service!.name;
         }

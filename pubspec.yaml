@@ -7,11 +7,11 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  bonsoir: ^1.0.1+1
+  bonsoir: ^2.2.0+1
   flutter:
     sdk: flutter
-  protobuf: ^2.0.0
+  protobuf: ^3.0.0
 
 dev_dependencies:
   pedantic: ^1.11.0
-  protoc_plugin: ^20.0.0
+  protoc_plugin: ^21.0.2
