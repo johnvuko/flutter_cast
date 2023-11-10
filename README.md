@@ -13,6 +13,7 @@ dependencies:
 
 ### iOS
 
+Required iOS 13 minimum.
 Since iOS 14 a few more steps are required https://developers.google.com/cast/docs/ios_sender/ios_permissions_changes
 
 In `ios/Runner/Info.plist` add:

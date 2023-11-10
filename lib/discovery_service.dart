@@ -14,31 +14,32 @@ class CastDiscoveryService {
     return _instance;
   }
 
-  Future<List<CastDevice>> search(
-      {Duration timeout = const Duration(seconds: 5)}) async {
+  Future<List<CastDevice>> search({Duration timeout = const Duration(seconds: 5)}) async {
     final results = <CastDevice>[];
 
     final discovery = BonsoirDiscovery(type: _domain);
     await discovery.ready;
-    await discovery.start();
 
     discovery.eventStream!.listen((event) {
-      if (event.type == BonsoirDiscoveryEventType.discoveryServiceResolved) {
+      if (event.type == BonsoirDiscoveryEventType.discoveryServiceFound) {
+        event.service?.resolve(discovery.serviceResolver);
+      } else if (event.type == BonsoirDiscoveryEventType.discoveryServiceResolved) {
         if (event.service == null || event.service?.attributes == null) {
           return;
         }
 
-        final port = event.service!.port;
-        final host = event.service?.toJson()['service.ip'];
+        final port = event.service?.port;
+        final host = event.service?.toJson()['service.ip'] ?? event.service?.toJson()['service.host'];
+
         String name = [
           event.service?.attributes?['md'],
-          event.service?.attributes?['fn']
+          event.service?.attributes?['fn'],
         ].whereType<String>().join(' - ');
         if (name.isEmpty) {
           name = event.service!.name;
         }
 
-        if (host == null) {
+        if (port == null || host == null) {
           return;
         }
 
@@ -56,6 +57,7 @@ class CastDiscoveryService {
       print('[CastDiscoveryService] error ${error.runtimeType} - $error');
     });
 
+    await discovery.start();
     await Future.delayed(timeout);
     await discovery.stop();
 
