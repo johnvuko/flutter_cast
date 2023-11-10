@@ -1,3 +1,8 @@
+## [2.0.0]
+
+* Upgrade dependency `bonsoir` to 3.0.0
+* Upgrade to Dart 3
+
 ## [1.1.1]
 
 * Upgrade dependency `bonsoir`
