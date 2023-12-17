@@ -140,14 +140,21 @@ class CastSession {
     });
   }
 
-  double getVolume() {
-    return _getStatus('GET_VOLUME');
+  void play() {
+    sendMessage(CastSession.kNamespaceMedia, {
+      'type': 'PLAY',
+    });
   }
 
-  /// Input should be between 0 and 1.
-  dynamic _getStatus(String type) {
+  void pause() {
+    sendMessage(CastSession.kNamespaceMedia, {
+      'type': 'PAUSE',
+    });
+  }
+
+  void getStatus() {
     sendMessage(CastSession.kNamespaceReceiver, {
-      'type': type,
+      'type': 'GET_STATUS',
     });
   }
 
