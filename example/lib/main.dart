@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cast/cast.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,18 +19,20 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(),
-        body: MyHomePage(),
+        body: const MyHomePage(),
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   Future<List<CastDevice>>? _future;
 
   @override
@@ -49,13 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           );
         } else if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
 
         if (snapshot.data!.isEmpty) {
-          return Column(
+          return const Column(
             children: [
               Center(
                 child: Text(
@@ -74,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return CastTile(device);
           },
           separatorBuilder: (BuildContext context, int index) =>
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
         );
       },
     );

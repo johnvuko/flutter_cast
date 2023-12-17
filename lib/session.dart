@@ -129,29 +129,6 @@ class CastSession {
     );
   }
 
-  /// Input should be between 0 and 1.
-  void setVolume(double level) {
-    sendMessage(CastSession.kNamespaceReceiver, {
-      'type': 'SET_VOLUME',
-      'volume': {
-        'level': level,
-        'muted': false,
-      },
-    });
-  }
-
-  void play() {
-    sendMessage(CastSession.kNamespaceMedia, {
-      'type': 'PLAY',
-    });
-  }
-
-  void pause() {
-    sendMessage(CastSession.kNamespaceMedia, {
-      'type': 'PAUSE',
-    });
-  }
-
   void getStatus() {
     sendMessage(CastSession.kNamespaceReceiver, {
       'type': 'GET_STATUS',
