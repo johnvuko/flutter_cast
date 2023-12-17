@@ -85,10 +85,6 @@ class CastDevice {
       'currentTime': 0,
       'media': message,
     });
-
-    await Future.delayed(const Duration(seconds: 20)).then((x) {
-      session.close();
-    });
   }
 
   Future _sendSingleRequest(
@@ -106,7 +102,7 @@ class CastDevice {
 
       session.sendMessage(kNameSpace, requestBody);
 
-      await Future.delayed(Duration(microseconds: 2));
+      await Future.delayed(Duration(microseconds: 100));
 
       await session.close();
     } else {

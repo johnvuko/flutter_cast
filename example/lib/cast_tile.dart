@@ -112,10 +112,6 @@ class _CastTileState extends State<CastTile> {
       'type': 'LAUNCH',
       'appId': '9AC194DC', // PLEX app ID for Chromecast
     });
-
-    Future.delayed(const Duration(seconds: 20)).then((x) async {
-      await session?.close();
-    });
   }
 
   // TODO: Not working, YouTube stack on logo, wrong appId?
