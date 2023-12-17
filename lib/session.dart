@@ -10,10 +10,12 @@ enum CastSessionState {
 }
 
 class CastSession {
-  static const kNamespaceConnection = 'urn:x-cast:com.google.cast.tp.connection';
+  static const kNamespaceConnection =
+      'urn:x-cast:com.google.cast.tp.connection';
   static const kNamespaceHeartbeat = 'urn:x-cast:com.google.cast.tp.heartbeat';
   static const kNamespaceReceiver = 'urn:x-cast:com.google.cast.receiver';
-  static const kNamespaceDeviceauth = 'urn:x-cast:com.google.cast.tp.deviceauth';
+  static const kNamespaceDeviceauth =
+      'urn:x-cast:com.google.cast.tp.deviceauth';
   static const kNamespaceMedia = 'urn:x-cast:com.google.cast.media';
 
   final String sessionId;
@@ -32,7 +34,8 @@ class CastSession {
 
   CastSession._(this.sessionId, this._socket);
 
-  static Future<CastSession> connect(String sessionId, CastDevice device, [Duration? timeout]) async {
+  static Future<CastSession> connect(String sessionId, CastDevice device,
+      [Duration? timeout]) async {
     final _socket = await CastSocket.connect(
       device.host,
       device.port,
@@ -57,7 +60,7 @@ class CastSession {
       });
       try {
         await _socket.flush();
-      } catch (_error) {}
+      } catch (_) {}
     }
 
     return _socket.close();
@@ -70,14 +73,20 @@ class CastSession {
         return;
       }
 
-      if (message.namespace == kNamespaceHeartbeat && message.payload['type'] == 'PING') {
+      if (message.namespace == kNamespaceHeartbeat &&
+          message.payload['type'] == 'PING') {
         sendMessage(kNamespaceHeartbeat, {
           'type': 'PONG',
         });
-      } else if (message.namespace == kNamespaceConnection && message.payload['type'] == 'CLOSE') {
+      } else if (message.namespace == kNamespaceConnection &&
+          message.payload['type'] == 'CLOSE') {
         close();
-      } else if (message.namespace == kNamespaceReceiver && message.payload['type'] == 'RECEIVER_STATUS') {
+      } else if (message.namespace == kNamespaceReceiver &&
+          message.payload['type'] == 'RECEIVER_STATUS') {
         _handleReceiverStatus(message.payload);
+        _messageController.add(message.payload);
+      } else if (message.namespace == CastSession.kNamespaceReceiver &&
+          message.payload['type'] == 'GET_VOLUME') {
         _messageController.add(message.payload);
       } else {
         _messageController.add(message.payload);
@@ -118,6 +127,28 @@ class CastSession {
       _transportId ?? 'receiver-0',
       payload,
     );
+  }
+
+  /// Input should be between 0 and 1.
+  void setVolume(double level) {
+    sendMessage(CastSession.kNamespaceReceiver, {
+      'type': 'SET_VOLUME',
+      'volume': {
+        'level': level,
+        'muted': false,
+      },
+    });
+  }
+
+  double getVolume() {
+    return _getStatus('GET_VOLUME');
+  }
+
+  /// Input should be between 0 and 1.
+  dynamic _getStatus(String type) {
+    sendMessage(CastSession.kNamespaceReceiver, {
+      'type': type,
+    });
   }
 
   Future<dynamic> flush() {
