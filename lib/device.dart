@@ -29,8 +29,14 @@ class CastDevice {
   @override
   int get hashCode => serviceName.hashCode;
 
-  /// Input should be between 0 and 1.
-  Future setVolume(double level) => _sendSingleRequest(
+  // Working only on YouTube
+  Future playButton() =>
+      _sendSingleRequest(CastSession.kNamespaceMedia, 'PLAY');
+  // Working only on YouTube
+  Future pauseButton() =>
+      _sendSingleRequest(CastSession.kNamespaceMedia, 'PAUSE');
+
+  Future setVolume(double level) => _sendSingleRequestBefore(
         CastSession.kNamespaceReceiver,
         'SET_VOLUME',
         payload: {
@@ -41,13 +47,52 @@ class CastDevice {
         },
       );
 
-  Future playButton() =>
-      _sendSingleRequest(CastSession.kNamespaceMedia, 'PLAY');
-  Future pauseButton() =>
-      _sendSingleRequest(CastSession.kNamespaceMedia, 'PAUSE');
+  Future openMedia({
+    required String url,
+    required String? title,
+    required String coverImage,
+  }) async {
+    CastSession session = await CastSessionManager().startSession(this);
+
+    session.sendMessage(CastSession.kNamespaceReceiver, {
+      'type': 'LAUNCH',
+      'appId': 'CC1AD845', // set the appId of your app here
+    });
+
+    await Future.delayed(const Duration(seconds: 10));
+
+    var message = {
+      // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
+      'contentId': url,
+      'contentType': 'video/mp4',
+      'streamType': 'BUFFERED', // or LIVE
+
+      // Title and cover displayed while buffering
+      'metadata': {
+        'type': 0,
+        'metadataType': 0,
+        'title': title,
+        'images': [
+          {
+            'url': coverImage,
+          }
+        ]
+      }
+    };
+    session.sendMessage(CastSession.kNamespaceMedia, {
+      'type': 'LOAD',
+      'autoPlay': true,
+      'currentTime': 0,
+      'media': message,
+    });
+
+    await Future.delayed(const Duration(seconds: 20)).then((x) {
+      session.close();
+    });
+  }
 
   Future _sendSingleRequest(
-    String receiver,
+    String kNameSpace,
     String type, {
     Map<String, dynamic>? payload,
   }) async {
@@ -59,13 +104,34 @@ class CastDevice {
       requestBody.addEntries([MapEntry('type', type)]);
       requestBody.addAll(payload ?? <String, dynamic>{});
 
-      session.sendMessage(receiver, requestBody);
+      session.sendMessage(kNameSpace, requestBody);
 
-      await Future.delayed(Duration(microseconds: 200));
+      await Future.delayed(Duration(microseconds: 2));
 
       await session.close();
     } else {
       print('Cant change state ${session.state}');
     }
+  }
+
+  Future _sendSingleRequestBefore(
+    String kNameSpace,
+    String type, {
+    Map<String, dynamic>? payload,
+    // bool closeSession = false,
+  }) async {
+    CastSession session = await CastSessionManager().startSession(this);
+
+    Map<String, dynamic> requestBody = {};
+    requestBody.addEntries([MapEntry('type', type)]);
+    requestBody.addAll(payload ?? <String, dynamic>{});
+
+    session.sendMessage(kNameSpace, requestBody);
+
+    session.stateStream.listen((state) {
+      if (state == CastSessionState.connected) {
+        session.close();
+      }
+    });
   }
 }
