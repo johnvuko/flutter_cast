@@ -96,8 +96,7 @@ class CastDevice {
         await CastSessionManager().startSessionUntillConnected(this);
 
     if (session.state == CastSessionState.connected) {
-      Map<String, dynamic> requestBody = {};
-      requestBody.addEntries([MapEntry('type', type)]);
+      Map<String, dynamic> requestBody = {'type': type};
       requestBody.addAll(payload ?? <String, dynamic>{});
 
       session.sendMessage(kNameSpace, requestBody);
@@ -118,8 +117,7 @@ class CastDevice {
   }) async {
     CastSession session = await CastSessionManager().startSession(this);
 
-    Map<String, dynamic> requestBody = {};
-    requestBody.addEntries([MapEntry('type', type)]);
+    Map<String, dynamic> requestBody = {'type': type};
     requestBody.addAll(payload ?? <String, dynamic>{});
 
     session.sendMessage(kNameSpace, requestBody);
