@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cast/cast.dart';
 
 class CastDevice {
@@ -30,13 +32,12 @@ class CastDevice {
   int get hashCode => serviceName.hashCode;
 
   // Working only on YouTube
-  Future playButton() =>
-      _sendSingleRequest(CastSession.kNamespaceMedia, 'PLAY');
+  Future playButton() => sendSingleRequest(CastSession.kNamespaceMedia, 'PLAY');
   // Working only on YouTube
   Future pauseButton() =>
-      _sendSingleRequest(CastSession.kNamespaceMedia, 'PAUSE');
+      sendSingleRequest(CastSession.kNamespaceMedia, 'PAUSE');
 
-  Future setVolume(double level) => _sendSingleRequestBefore(
+  Future setVolume(double level) => sendSingleRequestBefore(
         CastSession.kNamespaceReceiver,
         'SET_VOLUME',
         payload: {
@@ -87,7 +88,50 @@ class CastDevice {
     });
   }
 
-  Future _sendSingleRequest(
+  Future volumeUp(double level) async {
+    double? volume = await getVolume();
+    if (volume == null) {
+      print('Error setting new volume');
+      return;
+    }
+    await setVolume(volume + level);
+  }
+
+  Future volumeDown(double level) async {
+    double? volume = await getVolume();
+    if (volume == null) {
+      print('Error setting new volume');
+      return;
+    }
+    await setVolume(volume - level);
+  }
+
+  Future<Map<String, dynamic>?> getStatus() async {
+    CastSession session = await CastSessionManager().startSession(this);
+    Map<String, dynamic>? messageTemp;
+
+    session.getStatus();
+
+    await for (Map<String, dynamic> message in session.messageStream) {
+      if (message['type'] == 'RECEIVER_STATUS') {
+        messageTemp = message;
+        break;
+      }
+    }
+
+    session.close();
+    return messageTemp;
+  }
+
+  Future<double?> getVolume() async {
+    Map<String, dynamic>? status = await getStatus();
+    if (status == null) {
+      return null;
+    }
+    return status['status']?['volume']?['level'];
+  }
+
+  Future sendSingleRequest(
     String kNameSpace,
     String type, {
     Map<String, dynamic>? payload,
@@ -109,11 +153,11 @@ class CastDevice {
     }
   }
 
-  Future _sendSingleRequestBefore(
+  Future sendSingleRequestBefore(
     String kNameSpace,
     String type, {
     Map<String, dynamic>? payload,
-    // bool closeSession = false,
+    bool close = true,
   }) async {
     CastSession session = await CastSessionManager().startSession(this);
 
@@ -121,6 +165,10 @@ class CastDevice {
     requestBody.addAll(payload ?? <String, dynamic>{});
 
     session.sendMessage(kNameSpace, requestBody);
+
+    if (!close) {
+      return;
+    }
 
     session.stateStream.listen((state) {
       if (state == CastSessionState.connected) {

@@ -13,44 +13,12 @@ class CastTile extends StatefulWidget {
 
 class _CastTileState extends State<CastTile> {
   CastSession? session;
-
-  @override
-  void initState() {
-    super.initState();
-    initialzeSession();
-  }
-
-  initialzeSession() async {
-    CastSession sessionTemp =
-        await CastSessionManager().startSession(widget.device);
-
-    sessionTemp.messageStream.listen((message) {
-      logger.t('receive message: $message');
-
-      if (message['type'] == 'RECEIVER_STATUS') {
-        final double? volume = message['status']?['volume']?['level'];
-        logger.i('Recived status Volume=$volume');
-      }
-    });
-
-    sessionTemp.stateStream.listen((state) {
-      if (state == CastSessionState.connected && session == null) {
-        setState(() {
-          session = sessionTemp;
-        });
-      }
-    });
-    sessionTemp.getStatus();
-  }
+  final double volumeChangeValue = 0.1;
 
   Widget saperator() => const SizedBox(width: 10);
 
   @override
   Widget build(BuildContext context) {
-    // if (session == null) {
-    //   return const Text('Connecting');
-    // }
-
     return SizedBox(
       height: 50,
       child: ListView(
@@ -59,6 +27,27 @@ class _CastTileState extends State<CastTile> {
         children: [
           saperator(),
           Text(widget.device.name),
+          saperator(),
+          TextButton(
+            onPressed: () async {
+              final double? volume = await widget.device.getVolume();
+              final snackBar = SnackBar(content: Text('Volume: $volume'));
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            child: const Text('Get Volume'),
+          ),
+          saperator(),
+          TextButton(
+            onPressed: () => widget.device.volumeUp(volumeChangeValue),
+            child: const Text('Volume Up'),
+          ),
+          saperator(),
+          TextButton(
+            onPressed: () => widget.device.volumeDown(volumeChangeValue),
+            child: const Text('Volume Down'),
+          ),
           saperator(),
           TextButton(
             onPressed: widget.device.playButton,
@@ -71,7 +60,6 @@ class _CastTileState extends State<CastTile> {
           ),
           saperator(),
           TextButton(
-            // onPressed: _playVideo,
             onPressed: () {
               widget.device.openMedia(
                 url:
@@ -85,16 +73,6 @@ class _CastTileState extends State<CastTile> {
           ),
           saperator(),
           TextButton(
-            onPressed: () => widget.device.setVolume(0.2),
-            child: const Text('volume 0.2'),
-          ),
-          // saperator(),
-          // TextButton(
-          //   onPressed: () => _openYoutubeVideoAndPlay('o5owbiQahnY'),
-          //   child: const Text('YouTube'),
-          // ),
-          saperator(),
-          TextButton(
             onPressed: _openPLEX,
             child: const Text('PLEX'),
           ),
@@ -105,35 +83,36 @@ class _CastTileState extends State<CastTile> {
   }
 
   void _openPLEX() async {
-    await session?.close();
-    session = await CastSessionManager().startSession(widget.device);
-
-    session!.sendMessage(CastSession.kNamespaceReceiver, {
-      'type': 'LAUNCH',
-      'appId': '9AC194DC', // PLEX app ID for Chromecast
-    });
-  }
-
-  // TODO: Not working, YouTube stack on logo, wrong appId?
-  void _openYoutubeVideoAndPlay(String videoId) async {
-    await session?.close();
-    session = await CastSessionManager().startSession(widget.device);
-
-    session!.sendMessage(CastSession.kNamespaceReceiver, {
-      'type': 'LAUNCH',
-      'appId': '233637DE', // YouTube app ID for Chromecast
-    });
-
-    await Future.delayed(const Duration(seconds: 20));
-
-    session!.sendMessage(CastSession.kNamespaceMedia, {
-      'type': 'LOAD',
-      'media': {
-        'contentId': 'https://www.youtube.com/watch?v=$videoId',
-        'contentType': 'video/mp4',
-        'streamType': 'BUFFERED',
+    widget.device.sendSingleRequestBefore(
+      CastSession.kNamespaceReceiver,
+      'LAUNCH',
+      payload: {
+        'appId': '9AC194DC', // PLEX app ID for Chromecast
       },
-      // 'requestId': 1, // Use a unique requestId for each command
-    });
+      close: false,
+    );
   }
+
+  // TODO: YouTube chromecast support is deprecated I think the new one is youtube-remote
+  // void _openYoutubeVideoAndPlay(String videoId) async {
+  //   await session?.close();
+  //   session = await CastSessionManager().startSession(widget.device);
+
+  //   session!.sendMessage(CastSession.kNamespaceReceiver, {
+  //     'type': 'LAUNCH',
+  //     'appId': '233637DE', // YouTube app ID for Chromecast
+  //   });
+
+  //   await Future.delayed(const Duration(seconds: 20));
+
+  //   session!.sendMessage(CastSession.kNamespaceMedia, {
+  //     'type': 'LOAD',
+  //     'media': {
+  //       'contentId': 'https://www.youtube.com/watch?v=$videoId',
+  //       'contentType': 'video/mp4',
+  //       'streamType': 'BUFFERED',
+  //     },
+  //     // 'requestId': 1, // Use a unique requestId for each command
+  //   });
+  // }
 }
