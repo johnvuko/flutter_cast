@@ -48,6 +48,15 @@ class CastDevice {
         },
       );
 
+  Future launchAppId(String appId) async {
+    CastSession session = await CastSessionManager().startSession(this);
+
+    session.sendMessage(CastSession.kNamespaceReceiver, {
+      'type': 'LAUNCH',
+      'appId': appId,
+    });
+  }
+
   Future openMedia({
     required String url,
     required String? title,
