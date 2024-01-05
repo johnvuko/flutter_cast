@@ -1,5 +1,4 @@
 import 'package:cast/cast.dart';
-import 'package:cast_example/core/utils.dart';
 import 'package:flutter/material.dart';
 
 class CastTile extends StatefulWidget {
@@ -73,6 +72,21 @@ class _CastTileState extends State<CastTile> {
           ),
           saperator(),
           TextButton(
+            onPressed: () => widget.device.launchAppId('Netflix'),
+            child: const Text('Netflix'),
+          ),
+          saperator(),
+          TextButton(
+            onPressed: () => widget.device.openUrl('https://cybearjinni.com'),
+            child: const Text('Browser'),
+          ),
+          // saperator(),
+          // TextButton(
+          //   onPressed: () => widget.device.openYouTube('o5owbiQahnY'),
+          //   child: const Text('YouTube'),
+          // ),
+          saperator(),
+          TextButton(
             onPressed: _openPLEX,
             child: const Text('PLEX'),
           ),
@@ -92,27 +106,4 @@ class _CastTileState extends State<CastTile> {
       close: false,
     );
   }
-
-  // TODO: YouTube chromecast support is deprecated I think the new one is youtube-remote
-  // void _openYoutubeVideoAndPlay(String videoId) async {
-  //   await session?.close();
-  //   session = await CastSessionManager().startSession(widget.device);
-
-  //   session!.sendMessage(CastSession.kNamespaceReceiver, {
-  //     'type': 'LAUNCH',
-  //     'appId': '233637DE', // YouTube app ID for Chromecast
-  //   });
-
-  //   await Future.delayed(const Duration(seconds: 20));
-
-  //   session!.sendMessage(CastSession.kNamespaceMedia, {
-  //     'type': 'LOAD',
-  //     'media': {
-  //       'contentId': 'https://www.youtube.com/watch?v=$videoId',
-  //       'contentType': 'video/mp4',
-  //       'streamType': 'BUFFERED',
-  //     },
-  //     // 'requestId': 1, // Use a unique requestId for each command
-  //   });
-  // }
 }

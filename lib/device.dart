@@ -57,6 +57,104 @@ class CastDevice {
     });
   }
 
+  Future openUrl(String url) async {
+    CastSession session = await CastSessionManager().startSession(this);
+
+    session.sendMessage(CastSession.kNamespaceReceiver, {
+      'type': 'LAUNCH',
+      'appId': 'CC1AD845',
+    });
+
+    session.sendMessage(CastSession.kNamespaceReceiver, {
+      'type': 'LAUNCH',
+      'appId': '5C3F0A3C',
+    });
+
+    await Future.delayed(const Duration(seconds: 10));
+
+    session.sendMessage(
+      CastSession.kNamespaceDashcas,
+      {
+        'type': 'LOAD',
+        'app': 'DashCast',
+        'url': url,
+        'force': true,
+        'reload': 0,
+      },
+    );
+  }
+
+  // TODO: Getting the long token and response2 status is ok, not sure what is the problem,
+  // TODO: Reference https://github.com/i8beef/node-red-contrib-castv2/blob/master/lib/YouTubeController.js
+  // Future openYouTube(String videoId) async {
+  //   try {
+  //     // 1. Fetch screen ID
+  //     CastSession session = await CastSessionManager().startSession(this);
+
+  //     session.sendMessage(CastSession.kNamespaceReceiver, {
+  //       'type': 'LAUNCH',
+  //       'appId': '233637DE', // set the appId of your app here
+  //     });
+
+  //     session.sendMessage(CastSession.kNamespaceMedia, {
+  //       'type': 'LAUNCH',
+  //       'appId': 'CC1AD845',
+  //     });
+  //     await Future.delayed(const Duration(seconds: 10));
+
+  //     // 2. Fetch lounge token
+
+  //     const YOUTUBE_BASE_URL = 'https://www.youtube.com/';
+  //     const LOUNGE_TOKEN_URL =
+  //         YOUTUBE_BASE_URL + 'api/lounge/pairing/get_lounge_token_batch';
+  //     const BIND_URL = YOUTUBE_BASE_URL + 'api/lounge/bc/bind';
+
+  //     http.Response response = await http.post(
+  //       Uri.parse(LOUNGE_TOKEN_URL),
+  //       headers: <String, String>{
+  //         'Origin': YOUTUBE_BASE_URL,
+  //       },
+  //       body: {'screen_ids': session.sessionId},
+  //     );
+
+  //     dynamic responseBody = jsonDecode(response.body);
+  //     String loungeToken = (((responseBody as Map)['screens'] as List).first
+  //         as Map)['loungeToken'] as String;
+  //     print('wow $loungeToken');
+
+  //     // 3. Initialize queue
+
+  //     var url = Uri.parse(BIND_URL); // Replace with your actual BIND_URL
+  //     var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+  //     var body = {
+  //       'count': '0',
+  //     };
+  //     var queryParams = {
+  //       'device': 'REMOTE_CONTROL',
+  //       'id': '12345678-9ABC-4DEF-0123-0123456789AB',
+  //       'name': 'Desktop&app=youtube-desktop',
+  //       'mdx-version': '3',
+  //       'loungeIdToken': loungeToken,
+  //       'VER': '8',
+  //       'v': '2',
+  //       't': '1',
+  //       'ui': '1',
+  //       'RID': '75956',
+  //       'CVER': '1',
+  //       'method': 'setPlaylist',
+  //       'params': Uri.encodeComponent(
+  //           '{"videoId":"$videoId","currentTime":5,"currentIndex":0}'),
+  //       'TYPE': ''
+  //     };
+  //     url = url.replace(queryParameters: queryParams);
+
+  //     var response2 = await http.post(url, headers: headers, body: body);
+  //     print('response2 is $response2');
+  //   } catch (e) {
+  //     print('Error casting YouTube');
+  //   }
+  // }
+
   Future openMedia({
     required String url,
     required String? title,
@@ -128,7 +226,7 @@ class CastDevice {
       }
     }
 
-    session.close();
+    await session.close();
     return messageTemp;
   }
 

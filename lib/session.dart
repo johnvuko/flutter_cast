@@ -17,6 +17,7 @@ class CastSession {
   static const kNamespaceDeviceauth =
       'urn:x-cast:com.google.cast.tp.deviceauth';
   static const kNamespaceMedia = 'urn:x-cast:com.google.cast.media';
+  static const kNamespaceDashcas = 'urn:x-cast:es.offd.dashcast';
 
   final String sessionId;
   CastSocket get socket => _socket;
