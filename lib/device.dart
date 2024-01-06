@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cast/cast.dart';
+// import 'package:http/http.dart' as http;
 
 class CastDevice {
   /// unique across network
@@ -84,6 +85,54 @@ class CastDevice {
     );
   }
 
+  Future tts({
+    required String text,
+    required String? title,
+    required String coverImage,
+  }) async {
+    String language = 'en';
+    String speed = '1';
+
+    String url =
+        'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' +
+            language +
+            '&ttsspeed=' +
+            speed +
+            '&q=' +
+            Uri.encodeComponent(text);
+
+    CastSession session = await CastSessionManager().startSession(this);
+
+    session.sendMessage(CastSession.kNamespaceReceiver, {
+      'type': 'LAUNCH',
+      'appId': 'CC1AD845', // DefaultMediaReceiver
+    });
+
+    await Future.delayed(const Duration(seconds: 10));
+
+    var message = {
+      'contentId': url,
+      'contentType': 'audio/mp3',
+      'streamType': 'BUFFERED',
+      'metadata': {
+        'type': 0,
+        'metadataType': 0,
+        'title': title,
+        'images': [
+          {
+            'url': coverImage,
+          }
+        ]
+      }
+    };
+    session.sendMessage(CastSession.kNamespaceMedia, {
+      'type': 'LOAD',
+      'autoPlay': true,
+      'currentTime': 0,
+      'media': message,
+    });
+  }
+
   // TODO: Getting the long token and response2 status is ok, not sure what is the problem,
   // TODO: Reference https://github.com/i8beef/node-red-contrib-castv2/blob/master/lib/YouTubeController.js
   // Future openYouTube(String videoId) async {
@@ -164,7 +213,7 @@ class CastDevice {
 
     session.sendMessage(CastSession.kNamespaceReceiver, {
       'type': 'LAUNCH',
-      'appId': 'CC1AD845', // set the appId of your app here
+      'appId': 'CC1AD845', // DefaultMediaReceiver
     });
 
     await Future.delayed(const Duration(seconds: 10));

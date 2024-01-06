@@ -75,6 +75,15 @@ class _CastTileState extends State<CastTile> {
             onPressed: () => widget.device.launchAppId('Netflix'),
             child: const Text('Netflix'),
           ),
+          TextButton(
+            onPressed: () => widget.device.tts(
+              text: 'Hellow CyBear Jinni',
+              title: 'CBJ',
+              coverImage:
+                  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+            ),
+            child: const Text('TTS'),
+          ),
           saperator(),
           TextButton(
             onPressed: () => widget.device.openUrl('https://cybearjinni.com'),
