@@ -49,12 +49,22 @@ class CastDevice {
         },
       );
 
-  Future launchAppId(String appId) async {
+  Future<CastSession> launchAppId(String appId) async {
     CastSession session = await CastSessionManager().startSession(this);
 
     session.sendMessage(CastSession.kNamespaceReceiver, {
       'type': 'LAUNCH',
       'appId': appId,
+    });
+    return session;
+  }
+
+  Future close() async {
+    final CastSession session = await launchAppId('CC1AD845');
+    await Future.delayed(const Duration(seconds: 9));
+
+    session.sendMessage(CastSession.kNamespaceConnection, {
+      'type': 'CLOSE',
     });
   }
 

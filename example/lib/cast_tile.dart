@@ -100,6 +100,11 @@ class _CastTileState extends State<CastTile> {
             child: const Text('PLEX'),
           ),
           saperator(),
+          TextButton(
+            onPressed: widget.device.close,
+            child: const Text('CLOSE'),
+          ),
+          saperator(),
         ],
       ),
     );
