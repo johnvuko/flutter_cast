@@ -144,13 +144,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  static const String url =
+  "https://moodle1.myyschool.xyz/MXE1MDdTT3dhQUxwZEs2SDF6d2RHOXJFYVJ6NElFNUFVVEd4MjdiQWFWOWNqUDVyTU5aaGpzbnB1QlNoY2s0Rg.m3u8";
   void _sendMessagePlayVideo(CastSession session) {
     print('_sendMessagePlayVideo');
 
     var message = {
       // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
-      'contentId': 'http://commondatastorage.googleapis.com/gtv-videos-bucket/big_buck_bunny_1080p.mp4',
-      'contentType': 'video/mp4',
+      'contentId': url,
+      'contentType': 'application/x-mpegURL',
       'streamType': 'BUFFERED', // or LIVE
 
       // Title and cover displayed while buffering
@@ -158,9 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'type': 0,
         'metadataType': 0,
         'title': "Big Buck Bunny",
-        'images': [
-          {'url': 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg'}
-        ]
+        'images': []
       }
     };
 
