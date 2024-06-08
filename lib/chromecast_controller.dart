@@ -19,6 +19,7 @@ class ChromecastController {
   final ValueNotifier<bool> standByNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<List<CastDevice>> devicesNotifier =
       ValueNotifier<List<CastDevice>>([]);
+  final ValueNotifier<CastSessionState> sessionState = ValueNotifier<CastSessionState>(CastSessionState.connecting);
 
   bool hasError = false;
   String? error;
@@ -50,16 +51,12 @@ class ChromecastController {
     session = await CastSessionManager().startSession(device);
 
     session!.stateStream.listen((state) {
+      sessionState.value = state;
       if (state == CastSessionState.connected) {
-        final snackBar = SnackBar(content: Text('Connected'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Future.delayed(Duration(seconds: 5)).then((x) {
           _sendMessagePlayVideo(session!, url, title, startTime,
               streamType: streamType);
         });
-      } else if (state == CastSessionState.closed) {
-        final snackBar = SnackBar(content: Text('Closed'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
 

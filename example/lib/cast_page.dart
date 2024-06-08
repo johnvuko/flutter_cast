@@ -20,6 +20,7 @@ class _CastPageState extends State<CastPage> {
     _controller.playerStateNotifier.addListener(_updateUI);
     _controller.devicesNotifier.addListener(_updateUI);
     _controller.standByNotifier.addListener(_handleStandBy);
+    _controller.sessionState.addListener(_sessionState);
   }
 
   @override
@@ -33,6 +34,11 @@ class _CastPageState extends State<CastPage> {
 
   void _updateUI() {
     setState(() {});
+  }
+
+
+  void _sessionState() {
+    print(_controller.sessionState.value.name);
   }
 
   void _handleStandBy() {
