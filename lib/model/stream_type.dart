@@ -1,0 +1,4 @@
+
+enum StreamType {
+  BUFFERED, LIVE
+}
