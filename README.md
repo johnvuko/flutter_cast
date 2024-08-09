@@ -1,3 +1,7 @@
+[![Pub Likes](https://img.shields.io/pub/likes/cast)](https://pub.dev/packages/cast)
+[![Pub Popularity](https://img.shields.io/pub/popularity/cast)](https://pub.dev/packages/cast)
+[![Pub Points](https://img.shields.io/pub/points/cast)](https://pub.dev/packages/cast)
+
 # cast
 
 Dart package to discover and connect with Chromecast devices
