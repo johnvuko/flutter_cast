@@ -1,3 +1,7 @@
+## [2.1.0]
+
+* Remove upper version limit for `bonsoir`
+
 ## [2.0.0]
 
 * Upgrade dependency `bonsoir` to 3.0.0
