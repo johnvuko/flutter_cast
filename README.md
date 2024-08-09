@@ -125,4 +125,4 @@ Some informations about the protocol used https://docs.rs/crate/gcast/0.1.5/sour
 
 ## Author
 
-- [Jonathan VUKOVICH-TRIBOUHARET](https://github.com/jonathantribouharet) 
+- [Jonathan VUKOVICH](https://github.com/johnvuko)
