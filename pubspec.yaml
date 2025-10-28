@@ -13,5 +13,5 @@ dependencies:
   protobuf: ^5.0.0
 
 dev_dependencies:
-  protoc_plugin: ^21.1.2
   lints: ^6.0.0
+  protoc_plugin: ^23.0.0
