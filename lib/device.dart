@@ -40,6 +40,7 @@ class CastDeviceWAvailabilty extends CastDevice {
     required super.name,
     required super.host,
     required super.port,
+    required super.extras,
   });
 
   factory CastDeviceWAvailabilty.fromBonsoirServiceEvent(
@@ -65,6 +66,7 @@ class CastDeviceWAvailabilty extends CastDevice {
       name: name,
       host: host,
       port: port,
+      extras: service.attributes ?? {},
       isAvailable: isAvailable,
     );
   }
